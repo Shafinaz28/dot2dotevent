@@ -1,0 +1,1291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Decor – Flowers & Balloons</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #0498D5;
+      --accent: #E20D82;
+      --highlight: #FBEB02;
+
+      --bg: #EAF0FF;
+      --surface: rgba(255, 255, 255, 0.72);
+
+      --text: #0B0E14;
+      --head: #12162A;
+      --muted: rgba(18, 22, 42, 0.64);
+      --kicker: rgba(18, 22, 42, 0.72);
+      --border: rgba(11, 14, 20, 0.10);
+
+      --radius: 22px;
+      --shadow: 0 18px 44px rgba(11, 14, 20, 0.14);
+      --shadowSoft: 0 10px 30px rgba(11, 14, 20, 0.10);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(4, 152, 213, 0.16), transparent 60%),
+        radial-gradient(900px 600px at 90% 18%, rgba(226, 13, 130, 0.14), transparent 55%),
+        radial-gradient(900px 700px at 40% 92%, rgba(251, 235, 2, 0.16), transparent 55%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0)),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container { width: min(1160px, 92vw); margin-inline: auto; }
+
+    /* ===== BG Flowers ===== */
+    .bg-flowers {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+      filter: saturate(1.05);
+    }
+    .bg-flowers img {
+      position: absolute;
+      width: 110px;
+      opacity: 0.22;
+      transform: translate3d(0, 0, 0);
+      will-change: transform;
+    }
+    .bg-flowers img.f1 { left: 6%; top: 14%; width: 120px; }
+    .bg-flowers img.f2 { left: 82%; top: 10%; width: 140px; opacity: 0.18; }
+    .bg-flowers img.f3 { left: 72%; top: 62%; width: 110px; opacity: 0.18; }
+    .bg-flowers img.f4 { left: 12%; top: 72%; width: 130px; opacity: 0.16; }
+    .bg-flowers img.f5 { left: 45%; top: 30%; width: 160px; opacity: 0.12; }
+
+    /* ===== NAVBAR ===== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      height: 86px;
+      gap: 14px;
+    }
+
+    .brand {
+       display: flex; align-items: center; gap: 10px; 
+      }
+    .brand .logo {
+       width: 160px; height: 60px; display: grid; place-items: center; overflow: hidden; }
+    .brand .logo img { width: 100%; height: 100%; object-fit: contain; }
+
+    .menu {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--border);
+      padding: 6px;
+      border-radius: 999px;
+      box-shadow: var(--shadowSoft);
+    }
+
+    .menu a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--head);
+      transition: 0.25s ease;
+    }
+    .menu a:hover { background: white; color: var(--primary); }
+    .menu a.active { background: white; color: var(--accent); font-weight: 800; box-shadow: var(--shadowSoft); }
+
+    .ctaRow { display: flex; gap: 10px; align-items: center; }
+
+    .btn {
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all .2s ease;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: var(--shadowSoft);
+      user-select: none;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary {
+      border: none;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      box-shadow: 0 10px 25px rgba(4, 152, 213, 0.25);
+    }
+
+    @media (max-width: 900px) {
+      .menu { display: none; }
+      .nav { height: 78px; }
+      .brand .logo { width: 74px; height: 74px; }
+    }
+
+    /* ===== GLOBAL ===== */
+    section { padding: 64px 0; }
+    @media (max-width: 900px) { section { padding: 44px 0; } }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .kicker {
+      color: var(--kicker);
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .title {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(26px, 2.2vw, 38px);
+      margin: 10px 0 10px;
+      color: var(--head);
+    }
+
+    .sub {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0 0 22px;
+      max-width: 75ch;
+      font-weight: 650;
+    }
+
+    .pill {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.70);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadowSoft);
+      font-weight: 900;
+      white-space: nowrap;
+      color: rgba(18, 22, 42, 0.86);
+    }
+    .pill b { color: var(--accent); }
+    .dot { width: 10px; height: 10px; border-radius: 999px; background: var(--highlight); box-shadow: 0 0 0 4px rgba(251, 235, 2, 0.24); }
+
+    /* ===== HERO (ONLY ONE HERO) ===== */
+    .heroFull {
+      position: relative;
+      width: 100%;
+      min-height: calc(100vh - 92px);
+      background: url("image/hero-bg.jpg") center/cover no-repeat;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    .heroOverlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, rgba(11, 14, 20, 0.62), rgba(11, 14, 20, 0.22)),
+        radial-gradient(900px 520px at 12% 18%, rgba(4, 152, 213, 0.28), transparent 55%),
+        radial-gradient(900px 520px at 88% 22%, rgba(226, 13, 130, 0.22), transparent 55%),
+        radial-gradient(900px 680px at 50% 100%, rgba(251, 235, 2, 0.18), transparent 60%);
+      z-index: 0;
+      background-image: url('./image/336.jpg');
+    }
+
+    .heroCenterInner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      padding: 24px 0;
+    }
+
+    .heroCenterCard {
+      width: min(920px, 92vw);
+      margin: 0 auto;
+      padding: 38px;
+    }
+
+    .heroPill {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      font-weight: 900;
+      color: #111;
+      box-shadow: var(--shadowSoft);
+    }
+    .heroPill b { color: var(--accent); }
+
+    .heroFullTitle {
+      font-family: "Playfair Display", serif;
+      color: #fff;
+      font-size: clamp(38px, 4.8vw, 66px);
+      line-height: 1.05;
+      margin: 14px 0 12px;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .heroFullSub {
+      color: black;
+      font-weight: 650;
+      line-height: 1.75;
+      margin: 0 auto 18px;
+      max-width: 72ch;
+    }
+
+    .heroNewActions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .heroFull .btn {
+      
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      
+      box-shadow: none;
+    }
+    .heroFull .btn:hover { background: rgba(255, 255, 255, 0.22); }
+    .heroFull .btn.primary { border: none; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; }
+
+    /* hero text animation */
+    .heroAnim {
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(6px);
+      animation: heroIn .85s cubic-bezier(.2, .9, .2, 1) forwards;
+    }
+    .heroAnim1 { animation-delay: .12s; }
+    .heroAnim2 { animation-delay: .22s; }
+    .heroAnim3 { animation-delay: .34s; }
+    .heroAnim4 { animation-delay: .46s; }
+
+    @keyframes heroIn {
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .heroAnim { animation: none; opacity: 1; transform: none; filter: none; }
+    }
+
+    @media (max-width: 600px) {
+      .heroCenterCard { padding: 22px; }
+      .heroFull { min-height: calc(100vh - 82px); }
+    }
+
+    /* ===== SERVICES ===== */
+    .services {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) { .services { grid-template-columns: 1fr; } }
+
+    .service { padding: 18px; }
+    .service .icon {
+      width: 48px; height: 48px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadowSoft);
+      margin-bottom: 12px;
+      font-weight: 950;
+      color: var(--accent);
+    }
+    .service h3 { margin: 0 0 6px; font-size: 16px; font-weight: 900; color: var(--head); }
+    .service p { margin: 0; color: var(--muted); line-height: 1.65; font-weight: 650; font-size: 14px; }
+
+    /* ===== ABOUT ===== */
+    .aboutGrid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 16px; align-items: stretch; }
+    @media (max-width: 980px) { .aboutGrid { grid-template-columns: 1fr; } }
+
+    .aboutCard { padding: 22px; }
+    .aboutPoints { display: grid; gap: 12px; margin-top: 10px; }
+
+    .aboutMedia { overflow: hidden; min-height: 420px; }
+    .aboutMedia img { width: 100%; height: 100%; object-fit: cover; }
+
+    .miniCard {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadowSoft);
+    }
+    .miniCard b { display: block; margin-bottom: 6px; font-weight: 900; color: var(--head); }
+    .miniCard span { color: var(--muted); font-weight: 650; line-height: 1.6; display: block; }
+
+    /* ===== PROMO ===== */
+    .promo { padding: 0; }
+    .promoBand { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px; align-items: stretch; }
+    @media (max-width: 900px) { .promoBand { grid-template-columns: 1fr; } }
+
+    .promoLeft { position: relative; min-height: 300px; }
+    .promoLeft img { width: 100%; height: 100%; object-fit: cover; }
+
+    .promoBox {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      width: min(360px, 92%);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .promoBox b { font-family: "Playfair Display", serif; font-size: 20px; color: var(--head); }
+    .promoBox p { margin: 8px 0 12px; color: var(--muted); font-weight: 650; line-height: 1.6; }
+
+    .promoRight { padding: 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+
+    /* ===== GALLERY ===== */
+    .galleryShell { position: relative; padding: 18px; }
+    .galleryTopRow {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .carouselWrap {
+      position: relative;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.42);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .carouselWrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(4, 152, 213, 0.06), rgba(226, 13, 130, 0.05)),
+        url("image/gallery-bg.jpg") center/cover no-repeat;
+      opacity: .35;
+      z-index: 0;
+    }
+
+    .carousel {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 14px;
+      padding: 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .carousel::-webkit-scrollbar { display: none; }
+
+    .gCard {
+      flex: 0 0 260px;
+      scroll-snap-align: start;
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(11, 14, 20, 0.10);
+      box-shadow: var(--shadowSoft);
+      cursor: pointer;
+      transition: transform .18s ease;
+    }
+    .gCard:hover { transform: translateY(-2px); }
+
+    .gThumb { height: 170px; background: #fff; }
+    .gThumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .gInfo { padding: 12px 12px 14px; }
+    .gInfo h3 { margin: 0 0 6px; font-weight: 900; font-size: 14.5px; color: var(--head); }
+    .gInfo p { margin: 0 0 10px; color: var(--muted); font-weight: 650; line-height: 1.55; font-size: 13px; }
+
+    .gMeta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .pricePill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(11, 14, 20, 0.10);
+      background: rgba(255, 255, 255, 0.72);
+      font-weight: 900;
+      font-size: 12px;
+      color: rgba(18, 22, 42, 0.86);
+      box-shadow: var(--shadowSoft);
+    }
+    @media (max-width: 520px) { .gCard { flex-basis: 230px; } }
+
+    /* ===== REVIEWS ===== */
+    .testiWrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
+    @media (max-width: 900px) { .testiWrap { grid-template-columns: 1fr; } }
+
+    .quote { padding: 22px; }
+    .quote .stars { color: rgba(18, 22, 42, 0.78); font-weight: 900; letter-spacing: .12em; }
+    .quote p { margin: 12px 0 14px; color: rgba(18, 22, 42, 0.76); line-height: 1.8; font-weight: 650; }
+
+    .person { display: flex; gap: 10px; align-items: center; border-top: 1px solid var(--border); padding-top: 12px; }
+    .avatar {
+      width: 44px; height: 44px; border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: var(--shadowSoft);
+    }
+
+    /* ===== CONTACT ===== */
+    .contactGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 900px) { .contactGrid { grid-template-columns: 1fr; } }
+
+    .contactCard { padding: 22px; }
+
+    .fieldRow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .fieldRow { grid-template-columns: 1fr; } }
+
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    label { font-weight: 900; font-size: 13px; color: rgba(18, 22, 42, 0.78); }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.72);
+      outline: none;
+      font-weight: 650;
+      color: var(--text);
+    }
+    textarea { min-height: 120px; resize: vertical; }
+
+    /* ===== FOOTER ===== */
+    .siteFooter {
+      background: #0B0E14;
+      color: #fff;
+      padding: 70px 0 30px;
+      margin-top: 60px;
+    }
+    .footTop {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 50px;
+      margin-bottom: 30px;
+    }
+    .footLogo { display: block; width: 120px; margin-bottom: 18px; }
+    .footLogo img { width: 100%;  }
+
+    .footTitle {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 16px;
+    }
+    .footLinks a {
+      display: block;
+      color: #aaa;
+      margin-bottom: 12px;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+    .footLinks a:hover { color: white; transform: translateX(5px); }
+
+    .footBottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      color: #777;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    /* ===== Reveal ===== */
+    .reveal { opacity: 0; transform: translateY(26px); will-change: transform, opacity; }
+
+    /* ===== Lightbox ===== */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 14, 20, 0.58);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 18px;
+    }
+    .lightbox.show { display: flex; }
+
+    .lbPanel {
+      width: min(980px, 96vw);
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+      position: relative;
+      backdrop-filter: blur(14px);
+    }
+
+    .lbTop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid rgba(11, 14, 20, 0.10);
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .lbTitle {
+      font-weight: 900;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      color: var(--head);
+    }
+    .lbTitle .badgeDot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(226, 13, 130, 0.18);
+    }
+
+    .lbBtns { display: flex; gap: 8px; align-items: center; }
+   
+    
+
+    .lbBody { display: grid; grid-template-columns: 1.35fr 0.65fr; min-height: 520px; }
+    @media (max-width: 900px) { .lbBody { grid-template-columns: 1fr; } }
+
+    .lbStage { position: relative; background: rgba(255, 255, 255, 0.50); overflow: hidden; min-height: 420px; }
+    .lbStage img { width: 100%; height: 100%; object-fit: cover; display: block; transform-origin: center; }
+
+    .lbInfo {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.62);
+      border-left: 1px solid rgba(11, 14, 20, 0.10);
+    }
+    @media (max-width: 900px) {
+      .lbInfo { border-left: none; border-top: 1px solid rgba(11, 14, 20, 0.10); }
+    }
+
+    .lbInfo h3 {
+      margin: 0 0 6px;
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      color: var(--head);
+    }
+    .lbInfo p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-weight: 650;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .lbThumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+    .lbThumb {
+      height: 68px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(11, 14, 20, 0.10);
+      cursor: pointer;
+      background: #fff;
+    }
+    .lbThumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease; }
+    .lbThumb:hover img { transform: scale(1.06); }
+  </style>
+</head>
+
+<body>
+  <!-- BG flowers -->
+  <div class="bg-flowers" aria-hidden="true">
+    <img class="f1" src="image/bg/flower-1.png" alt="">
+    <img class="f2" src="image/bg/flower-2.png" alt="">
+    <img class="f3" src="image/bg/flower-3.png" alt="">
+    <img class="f4" src="image/bg/flower-4.png" alt="">
+    <img class="f5" src="image/bg/flower-5.png" alt="">
+  </div>
+
+  <!-- NAV -->
+  <header class="topbar">
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="#home">
+          <div class="logo">
+            <img src="image/logo.png" alt="Logo">
+          </div>
+        </a>
+
+        <nav class="menu" id="menu">
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#collections">Gallery</a>
+          <a href="#reviews">Reviews</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="ctaRow">
+          <a class="btn primary" href="#contact">Get Quote</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="heroFull" id="home">
+    <div class="heroOverlay"></div>
+    <div class="container heroCenterInner">
+      <div class="heroCenterCard">
+        <div class="heroPill heroAnim heroAnim1">
+        </div>
+
+        <h1 class="heroFullTitle heroAnim heroAnim2">
+          Making Every Occasion <br />Unforgettable
+        </h1>
+
+        <p class="heroFullSub heroAnim heroAnim3">
+          From intimate ceremonies to grand weddings — we create stunning backdrops, arches, mandaps & themed setups.
+        </p>
+
+        <div class="heroNewActions heroAnim heroAnim4">
+          <a class="btn primary" href="#contact">Book Your Date</a>
+          <a class="btn" href="#services">Explore Services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="aboutGrid">
+        <div class="card reveal aboutMedia">
+          <img src="image/img5.jpg" alt="About decor image">
+        </div>
+
+        <div class="card reveal aboutCard">
+          <div class="kicker">About Us</div>
+          <div class="title">More than just decor — we build the vibe.</div>
+          <p class="sub">
+            Premium setups that look beautiful in photos & videos.
+            Pick theme colors, props, balloons, flowers — we execute clean and on-time.
+          </p>
+
+          <div class="aboutPoints">
+            <div class="miniCard">
+              <b>Premium Styling</b>
+              <span>Modern themes, elegant color palettes, clean finishing.</span>
+            </div>
+            <div class="miniCard">
+              <b>Custom Backdrops</b>
+              <span>Stage, entry arch, welcome board, photo corner.</span>
+            </div>
+            <div class="miniCard">
+              <b>On-time Setup</b>
+              <span>Quick execution with coordinated team work.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="kicker reveal">What We Do</div>
+      <div class="title reveal">Decoration services that elevate your moments.</div>
+      <p class="sub reveal">Flower decor + balloon decor + full event setups. (Not selling flowers)</p>
+
+      <div class="services">
+        <div class="card service reveal">
+          <div class="icon">✦</div>
+          <h3>Birthday Decoration</h3>
+          <p>Balloon arches, name boards, cake backdrop, photo corners.</p>
+        </div>
+
+        <div class="card service reveal">
+          <div class="icon">✿</div>
+          <h3>Wedding / Marriage Setup</h3>
+          <p>Stage, mandap, reception entry, floral panels & aisle decor.</p>
+        </div>
+
+        <div class="card service reveal">
+          <div class="icon">✸</div>
+          <h3>Ceremony Themes</h3>
+          <p>Sreemantha, baby naming, house warming, engagement & more.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMO -->
+  <section class="promo">
+    <div class="container">
+      <div class="promoBand">
+        <div class="card promoLeft reveal">
+          <img src="image/img1.jpg" alt="Promo image">
+          <div class="promoBox">
+            <b>Special Decoration Packages</b>
+            <p>Tell us budget + theme colors. We’ll share best options & quotes.</p>
+            <a class="btn primary" href="#contact">Claim Offer</a>
+          </div>
+        </div>
+
+        <div class="card promoRight reveal">
+          <div class="miniCard">
+            <b>Trusted Work</b>
+            <span>Families & brands choose us for premium finishes.</span>
+          </div>
+          <div class="miniCard">
+            <b>Fast Booking</b>
+            <span>Same-day options depending on availability.</span>
+          </div>
+          <div class="miniCard">
+            <b>Custom Theme Work</b>
+            <span>Match your outfit, event theme, or brand colors.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="collections">
+    <div class="container">
+      <div class="galleryShell card reveal">
+        <div class="galleryTopRow">
+          <div>
+            <div class="kicker">Gallery</div>
+            <div class="title" style="margin-bottom:6px;">Popular Decoration Setups</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <span class="pill"><span class="dot"></span> Trending</span>
+            <a class="btn primary" href="#contact">Book Now</a>
+          </div>
+        </div>
+
+        <div class="carouselWrap">
+          <div class="carousel" id="galleryCarousel">
+            <div class="gCard"
+              data-title="Birthday Decoration"
+              data-desc="Colorful balloon & floral setups for memorable birthdays."
+              data-images="image/img6.jpg,image/img9.jpg,image/img7.jpg">
+              <div class="gThumb"><img src="image/img6.jpg" alt="Birthday decor"></div>
+              <div class="gInfo">
+                <h3>Birthday Decoration</h3>
+                <p>Balloon arches + name boards + photo corner.</p>
+                <div class="gMeta">
+                  <span class="pricePill">✨ Premium</span>
+                  <span class="btn">View</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="gCard"
+              data-title="Anniversary Decoration"
+              data-desc="Elegant decor for romantic celebrations."
+              data-images="image/img.jpg,image/img4.jpg,image/img1.jpg">
+              <div class="gThumb"><img src="image/img.jpg" alt="Anniversary decor"></div>
+              <div class="gInfo">
+                <h3>Anniversary Decoration</h3>
+                <p>Backdrop + lighting + classy finishing.</p>
+                <div class="gMeta">
+                  <span class="pricePill">💖 Elegant</span>
+                  <span class="btn">View</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="gCard"
+              data-title="Marriage Decoration"
+              data-desc="Stage, mandap & venue decoration for weddings."
+              data-images="image/img1.jpg,image/img5.jpg,image/img7.jpg">
+              <div class="gThumb"><img src="image/img1.jpg" alt="Marriage decor"></div>
+              <div class="gInfo">
+                <h3>Marriage Decoration</h3>
+                <p>Stage / mandap / entry + floral panels.</p>
+                <div class="gMeta">
+                  <span class="pricePill">👑 Grand</span>
+                  <span class="btn">View</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="gCard"
+              data-title="Sreemantha Decoration"
+              data-desc="Traditional & floral décor for Sreemantham ceremony."
+              data-images="image/img4.jpg,image/img6.jpg,image/img5.jpg">
+              <div class="gThumb"><img src="image/img4.jpg" alt="Sreemantha decor"></div>
+              <div class="gInfo">
+                <h3>Sreemantha Decoration</h3>
+                <p>Traditional theme setups with premium look.</p>
+                <div class="gMeta">
+                  <span class="pricePill">🌸 Traditional</span>
+                  <span class="btn">View</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="gCard"
+              data-title="Baby Naming Ceremony"
+              data-desc="Soft pastel themes with flowers & balloons."
+              data-images="image/img9.jpg,image/img6.jpg,image/img.jpg">
+              <div class="gThumb"><img src="image/img9.jpg" alt="Baby naming decor"></div>
+              <div class="gInfo">
+                <h3>Baby Naming</h3>
+                <p>Pastel colors + cute props + clean styling.</p>
+                <div class="gMeta">
+                  <span class="pricePill">🍼 Cute</span>
+                  <span class="btn">View</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="gCard"
+              data-title="House Warming Decoration"
+              data-desc="Entrance, pooja & home floral décor."
+              data-images="image/img7.jpg,image/img5.jpg,image/img4.jpg">
+              <div class="gThumb"><img src="image/img7.jpg" alt="House warming decor"></div>
+              <div class="gInfo">
+                <h3>House Warming</h3>
+                <p>Entrance + pooja decor + welcome board.</p>
+                <div class="gMeta">
+                  <span class="pricePill">🏠 Fresh</span>
+                  <span class="btn">View</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews">
+    <div class="container">
+      <div class="kicker reveal">Reviews</div>
+      <div class="title reveal">What customers say.</div>
+
+      <div class="testiWrap">
+        <div class="card quote reveal">
+          <div class="stars">★★★★★</div>
+          <p>“Super premium finishing and the setup was on time. The photos came out amazing!”</p>
+          <div class="person">
+            <div class="avatar"></div>
+            <div>
+              <b>Customer Name</b>
+              <span>Bangalore</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card quote reveal">
+          <div class="stars">★★★★★</div>
+          <p>“Exactly like the theme we wanted. Very clean work and great coordination.”</p>
+          <div class="person">
+            <div class="avatar"></div>
+            <div>
+              <b>Customer Name</b>
+              <span>Event Setup</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="kicker reveal">Get In Touch</div>
+      <div class="title reveal">Let’s plan your decoration.</div>
+
+      <div class="contactGrid">
+        <div class="card contactCard reveal">
+          <div class="miniCard" style="margin-bottom:12px;">
+            <b>Visit / Service Area</b>
+            <span>Your area & city details</span>
+            <span style="margin-top:6px;">Phone: +91 XXXXXXXXXX</span>
+          </div>
+
+          <div class="miniCard">
+            <b>Working Hours</b>
+            <span>Mon–Sun: 9:00 AM – 9:00 PM</span>
+            <span style="margin-top:6px;">Same-day booking based on availability.</span>
+          </div>
+        </div>
+
+        <div class="card contactCard reveal">
+          <form onsubmit="event.preventDefault(); alert('Submitted (demo). Connect to WhatsApp/backend.');">
+            <div class="fieldRow">
+              <div class="field">
+                <label>Name</label>
+                <input placeholder="Your name" required />
+              </div>
+              <div class="field">
+                <label>Phone</label>
+                <input placeholder="+91" required />
+              </div>
+            </div>
+
+            <div class="fieldRow">
+              <div class="field">
+                <label>Occasion</label>
+                <input placeholder="Birthday / Wedding / Sreemantha" />
+              </div>
+              <div class="field">
+                <label>Date</label>
+                <input type="date" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Message</label>
+              <textarea placeholder="Theme colors, location, budget, any reference image link"></textarea>
+            </div>
+
+            <button class="btn primary" type="submit">Send Enquiry</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="siteFooter">
+    <div class="container">
+      <div class="footTop">
+        <div>
+          <a class="footLogo" href="#home">
+            <img src="image/logo.png" alt="Logo">
+          </a>
+          <p style="color:#aaa; line-height:1.6; font-size:14px; margin:0;">
+            Premium event styling and decoration services in Bangalore. Making your special moments picture perfect.
+          </p>
+          <div style="margin-top:18px; display:flex; gap:16px; font-size:20px; color:#fff;">
+            <a href="https://www.instagram.com/dot2dotevents/" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            
+          </div>
+        </div>
+
+        <div>
+          <div class="footTitle">COMPANY</div>
+          <div class="footLinks">
+            <a href="#about">About Us</a>
+            <a href="#services">Services</a>
+            <a href="#collections">Gallery</a>
+            <a href="#reviews">Reviews</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footTitle">SERVICES</div>
+          <div class="footLinks">
+            <a href="#collections">Birthday Decor</a>
+            <a href="#collections">Wedding Stage</a>
+            <a href="#collections">House Warming</a>
+            <a href="#collections">Baby Shower</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footTitle">CONTACT</div>
+          <div style="color:#aaa; font-size:14px; line-height:1.8;">
+            No. 123, 4th Cross,<br>
+            Indiranagar, Bangalore - 560038<br><br>
+            📞 +91 98765 43210
+          </div>
+        </div>
+      </div>
+
+      <div class="footBottom">
+        <div>© <span id="yr"></span> Event Decor. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lbPanel" role="dialog" aria-modal="true" aria-label="Gallery popup">
+      <div class="lbTop">
+        <div class="lbTitle"><span class="badgeDot"></span><span id="lbTitle">Gallery</span></div>
+        <div class="lbBtns">
+          
+          <div class="iconBtn" id="lbClose" title="Close">✕</div>
+        </div>
+      </div>
+
+      <div class="lbBody">
+        <div class="lbStage" id="lbStage">
+          <img id="lbImg" src="" alt="Popup image">
+        </div>
+
+        <div class="lbInfo">
+          <h3 id="lbH3">Title</h3>
+          <p id="lbDesc">Description</p>
+<a class="btn primary" href="#contact" id="lbBook">Book This Setup</a>
+          <div class="lbThumbs" id="lbThumbs"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <script>
+    // year (safe)
+    const yr = document.getElementById("yr");
+    if (yr) yr.textContent = new Date().getFullYear();
+
+    // GSAP reveal
+    gsap.registerPlugin(ScrollTrigger);
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!prefersReduced) {
+      gsap.utils.toArray(".reveal").forEach((el) => {
+        gsap.fromTo(el, { opacity: 0, y: 26 }, {
+          opacity: 1, y: 0, duration: 0.9, ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            end: "bottom 15%",
+            toggleActions: "play none none reverse"
+          }
+        });
+      });
+
+      // BG flowers float
+      gsap.to(".bg-flowers .f1", { y: -18, x: 10, rotation: 8, duration: 6, yoyo: true, repeat: -1, ease: "sine.inOut" });
+      gsap.to(".bg-flowers .f2", { y: 22, x: -12, rotation: -10, duration: 7, yoyo: true, repeat: -1, ease: "sine.inOut" });
+      gsap.to(".bg-flowers .f3", { y: -16, x: -10, rotation: 9, duration: 6.5, yoyo: true, repeat: -1, ease: "sine.inOut" });
+      gsap.to(".bg-flowers .f4", { y: 20, x: 12, rotation: -8, duration: 7.5, yoyo: true, repeat: -1, ease: "sine.inOut" });
+      gsap.to(".bg-flowers .f5", { y: -22, x: 14, rotation: 12, duration: 8, yoyo: true, repeat: -1, ease: "sine.inOut" });
+    }
+
+    // Active nav
+    const sections = ["about", "services", "collections", "reviews", "contact"]
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    const navLinks = Array.from(document.querySelectorAll("#menu a"));
+    const setActive = (id) => navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => entry.isIntersecting && setActive(entry.target.id));
+    }, { threshold: 0.35 });
+
+    sections.forEach(sec => observer.observe(sec));
+
+    // Auto-scrolling carousel (hover to pause)
+    const car = document.getElementById("galleryCarousel");
+    let carPaused = false;
+    let carDir = 1;
+    const SPEED = 0.6;
+
+    function step() {
+      if (car && !carPaused) {
+        car.scrollLeft += SPEED * carDir;
+        const max = car.scrollWidth - car.clientWidth - 2;
+        if (car.scrollLeft >= max) carDir = -1;
+        if (car.scrollLeft <= 0) carDir = 1;
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+
+    if (car) {
+      car.addEventListener("mouseenter", () => carPaused = true);
+      car.addEventListener("mouseleave", () => carPaused = false);
+      car.addEventListener("touchstart", () => carPaused = true, { passive: true });
+      car.addEventListener("touchend", () => carPaused = false, { passive: true });
+    }
+
+    // Lightbox
+    const lb = document.getElementById("lightbox");
+    const lbPanel = lb.querySelector(".lbPanel");
+    const lbImg = document.getElementById("lbImg");
+    const lbH3 = document.getElementById("lbH3");
+    const lbDesc = document.getElementById("lbDesc");
+    const lbThumbs = document.getElementById("lbThumbs");
+
+    const btnClose = document.getElementById("lbClose");
+    const btnPrev = document.getElementById("lbPrev");
+    const btnNext = document.getElementById("lbNext");
+    const btnUp = document.getElementById("lbUp");
+    const btnDown = document.getElementById("lbDown");
+
+    let currentImages = [];
+    let currentIndex = 0;
+
+    function renderThumbs() {
+      lbThumbs.innerHTML = "";
+      currentImages.forEach((src, idx) => {
+        const d = document.createElement("div");
+        d.className = "lbThumb";
+        d.innerHTML = `<img src="${src}" alt="thumb">`;
+        d.addEventListener("click", () => showIndex(idx, "fade"));
+        lbThumbs.appendChild(d);
+      });
+    }
+
+    function showIndex(idx, mode = "left") {
+      if (!currentImages.length) return;
+      currentIndex = (idx + currentImages.length) % currentImages.length;
+      const nextSrc = currentImages[currentIndex];
+
+      let fromVars = { opacity: 0, scale: 0.98 };
+      if (mode === "left") fromVars = { x: 40, opacity: 0, scale: 0.98 };
+      if (mode === "right") fromVars = { x: -40, opacity: 0, scale: 0.98 };
+      if (mode === "up") fromVars = { y: 40, opacity: 0, scale: 0.98 };
+      if (mode === "down") fromVars = { y: -40, opacity: 0, scale: 0.98 };
+
+      gsap.to(lbImg, {
+        opacity: 0, duration: 0.12, onComplete: () => {
+          lbImg.src = nextSrc;
+          gsap.fromTo(lbImg, fromVars, { x: 0, y: 0, opacity: 1, scale: 1, duration: 0.35, ease: "power3.out" });
+        }
+      });
+    }
+
+    function openLightbox({ title, desc, images, startIndex = 0 }) {
+      currentImages = images;
+      currentIndex = startIndex;
+      lbH3.textContent = title || "Decoration";
+      lbDesc.textContent = desc || "";
+      renderThumbs();
+      lbImg.src = currentImages[currentIndex] || "";
+      lb.classList.add("show");
+      lb.setAttribute("aria-hidden", "false");
+      gsap.fromTo(lbPanel, { opacity: 0, y: 18, scale: 0.98 }, { opacity: 1, y: 0, scale: 1, duration: 0.28, ease: "power3.out" });
+    }
+
+    function closeLightbox() {
+      gsap.to(lbPanel, {
+        opacity: 0, y: 18, scale: 0.98, duration: 0.2, ease: "power2.in", onComplete: () => {
+          lb.classList.remove("show");
+          lb.setAttribute("aria-hidden", "true");
+        }
+      });
+    }
+
+    const lbBook = document.getElementById("lbBook");
+
+if (lbBook) {
+  lbBook.addEventListener("click", (e) => {
+    e.preventDefault();           // stop default jump
+    closeLightbox();              // close popup first
+
+    // after popup closes, scroll to contact
+    setTimeout(() => {
+      const contact = document.getElementById("contact");
+      if (contact) contact.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 260); // match close animation duration
+  });
+}
+
+
+    if (car) {
+      car.addEventListener("click", (e) => {
+        const card = e.target.closest(".gCard");
+        if (!card) return;
+        const title = card.dataset.title;
+        const desc = card.dataset.desc;
+        const images = (card.dataset.images || "").split(",").map(s => s.trim()).filter(Boolean);
+        openLightbox({ title, desc, images, startIndex: 0 });
+      });
+    }
+
+    btnClose.addEventListener("click", closeLightbox);
+    btnPrev.addEventListener("click", () => showIndex(currentIndex - 1, "right"));
+    btnNext.addEventListener("click", () => showIndex(currentIndex + 1, "left"));
+    btnUp.addEventListener("click", () => showIndex(currentIndex + 1, "up"));
+    btnDown.addEventListener("click", () => showIndex(currentIndex - 1, "down"));
+
+    lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
+
+    document.addEventListener("keydown", (e) => {
+      if (!lb.classList.contains("show")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") showIndex(currentIndex - 1, "right");
+      if (e.key === "ArrowRight") showIndex(currentIndex + 1, "left");
+      if (e.key === "ArrowUp") showIndex(currentIndex + 1, "up");
+      if (e.key === "ArrowDown") showIndex(currentIndex - 1, "down");
+    });
+
+    // swipe
+    let sx = 0, sy = 0;
+    lbPanel.addEventListener("touchstart", (e) => {
+      const t = e.touches[0]; sx = t.clientX; sy = t.clientY;
+    }, { passive: true });
+
+    lbPanel.addEventListener("touchend", (e) => {
+      const t = e.changedTouches[0];
+      const dx = t.clientX - sx;
+      const dy = t.clientY - sy;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+        if (dx < 0) showIndex(currentIndex + 1, "left");
+        else showIndex(currentIndex - 1, "right");
+      } else if (Math.abs(dy) > 40) {
+        if (dy < 0) showIndex(currentIndex + 1, "up");
+        else showIndex(currentIndex - 1, "down");
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>
