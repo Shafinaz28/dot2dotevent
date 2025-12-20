@@ -477,6 +477,23 @@
       box-shadow: var(--shadowSoft); transition: .2s ease; font-size: 14px;
     }
     .socials a:hover { transform: translateY(-2px); color: var(--primary); }
+.form-title {
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  color: rgb(58, 47, 47);
+  position: relative;
+}
+
+.form-title::after {
+  content: "";
+  width: 60px;
+  height: 3px;
+  background: #f59e0b;
+  display: block;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
 
     .contactForm { padding: 24px; display: flex; flex-direction: column; justify-content: center; }
     @media(max-width:600px) { .contactForm { padding: 20px; } }
@@ -931,10 +948,12 @@
 
         <div class="card contactForm">
           <form id="contactForm">
+            <h1 class="form-title">Book Your Event</h1>
+
             <div class="fieldRow">
               <div class="field">
                 <label>Name</label>
-                <input name="name" placeholder="Your name" required />
+                <input name="name" placeholder="name" required />
               </div>
               <div class="field">
                 <label>Phone</label>
@@ -970,13 +989,13 @@
               </div>
               <div class="field">
                 <label>Budget</label>
-                <input name="budget" placeholder="₹10k / ₹25k" />
+                <input name="budget" placeholder="" />
               </div>
             </div>
 
             <div class="field">
               <label>Message</label>
-              <textarea name="message" placeholder="Theme colors, location, venue size..."></textarea>
+              <textarea name="message" placeholder="message"></textarea>
             </div>
 
             <button class="btn primary" type="submit" style="width:100%;">
@@ -1114,7 +1133,7 @@
                 <label>Budget</label>
                 <div class="input-wrap">
                   <i class="fa-solid fa-indian-rupee-sign icon"></i>
-                  <input name="budget" placeholder="10k - 25k" />
+                  <input name="budget" placeholder="" />
                 </div>
               </div>
             </div>
