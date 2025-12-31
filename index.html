@@ -330,7 +330,7 @@
     .pill:hover { background: #fff; color: var(--primary); transform: translateY(-2px); }
 
     /* =======================
-       GALLERY GRID (NO FILTERS)
+       GALLERY GRID (UPDATED FOR FULL IMAGES)
        ======================= */
     .galleryHeader { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
     
@@ -338,7 +338,6 @@
       margin-top: 20px; 
       display: grid; 
       gap: 12px; 
-      /* Changed to 3 columns for better 6-item layout */
       grid-template-columns: repeat(3, 1fr); 
     }
 
@@ -352,12 +351,24 @@
         box-shadow: var(--shadowSoft); cursor: pointer; 
     }
     
-    .thumb { aspect-ratio: 4/3; overflow: hidden; background: #fff; }
-    .gItem img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 0.4s ease; }
-    .gItem:hover img { transform: scale(1.08); }
+    /* UPDATED: Thumbnails show FULL image (COVER) with NO Black Background */
+    .thumb { 
+      height: 260px; /* Fixed height for uniformity */
+      overflow: hidden; 
+      background: #eee; /* Light background for loading state */
+      display: block;
+    }
+    .gItem img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; /* CHANGED FROM CONTAIN TO COVER */
+      transition: transform 0.4s ease; 
+    }
+    .gItem:hover img { transform: scale(1.05); }
+    
     .gOverlay { 
         position: absolute; inset: auto 0 0 0; padding: 8px 10px; 
-        background: linear-gradient(180deg, transparent, rgba(11, 14, 20, 0.7)); 
+        background: linear-gradient(180deg, transparent, rgba(11, 14, 20, 0.8)); 
         color: #fff; display: flex; justify-content: space-between; align-items: flex-end; 
     }
     .gOverlay b { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; }
@@ -424,7 +435,7 @@
        ======================= */
     .ctaBand {
       position: relative; padding: 70px 0;
-      background: url("image/img2.jpg") center/cover no-repeat;
+      background: url("./image/img2.jpg") center/cover no-repeat;
       color: #fff; text-align: center; isolation: isolate; margin-top: 0;
       border-top: 1px solid rgba(255, 255, 255, 0.35); border-bottom: 1px solid rgba(255, 255, 255, 0.35);
     }
@@ -455,8 +466,8 @@
       padding: 20px; border-top: 1px solid rgba(11, 14, 20, 0.08); display: grid; gap: 8px;
       background: rgba(255, 255, 255, 0.70); backdrop-filter: blur(10px);
     }
-    .line { display: flex; align-items: center; gap: 10px; color: rgba(18, 22, 42, 0.80); font-weight: 600; font-size: 13.5px; }
-    .line i { color: var(--accent); width: 16px; text-align: center; }
+    .line { display: flex; align-items: flex-start; gap: 10px; color: rgba(18, 22, 42, 0.80); font-weight: 600; font-size: 13.5px; line-height: 1.5; }
+    .line i { color: var(--accent); width: 16px; text-align: center; margin-top: 2px; }
     
     .socials { display: flex; gap: 10px; margin-top: 8px; }
     .socials a {
@@ -533,7 +544,7 @@
     /* =======================
        LIGHTBOX & MODAL
        ======================= */
-    .lightbox { position: fixed; inset: 0; z-index: 1400; display: none; align-items: center; justify-content: center; background: rgba(11, 14, 20, 0.85); padding: 10px; }
+    .lightbox { position: fixed; inset: 0; z-index: 1400; display: none; align-items: center; justify-content: center; background: rgba(11, 14, 20, 0.95); padding: 10px; }
     .lightbox.show { display: flex; }
     .lbPanel { width: min(1000px, 98vw); height: min(700px, 85vh); position: relative; display: grid; grid-template-rows: 1fr 80px; gap: 10px; }
     .lbClose { position: absolute; top: -15px; right: -5px; width: 36px; height: 36px; border-radius: 999px; background: #fff; color: #000; display: grid; place-items: center; cursor: pointer; z-index: 3; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
@@ -629,7 +640,7 @@
           <div class="kicker hero-anim" style="color:rgba(255,255,255,0.80);">Premium Decoration Services</div>
           <h1 class="heroTitle hero-anim">Balloon & Flower Decoration</h1>
           <p class="heroSub hero-anim">
-            We do complete decoration for all types of events: balloon arches, floral backdrops,
+            We do complete decoration for all types of events: balloon arches, floral backdrops, 
             entrance decor, stage setup, mandap, photo corners, and custom themes.
           </p>
           <div class="heroActions hero-anim">
@@ -683,7 +694,7 @@
 
       <div class="servicesGrid">
         <article class="svc">
-          <div class="svcMedia" style="background-image:url('image/img1.jpg');"></div>
+          <div class="svcMedia" style="background-image:url('image/13.jpg');"></div>
           <div class="svcInner">
             <h3>Wedding / Marriage Setup</h3>
             <p>Stage, mandap, aisle decor, entry arch, floral panels & lighting coordination.</p>
@@ -696,7 +707,7 @@
         </article>
 
         <article class="svc">
-          <div class="svcMedia" style="background-image:url('image/img6.jpg');"></div>
+          <div class="svcMedia" style="background-image:url('birthday/img1.jpg');"></div>
           <div class="svcInner">
             <h3>Birthday / Surprise Decor</h3>
             <p>Balloon arches, name boards, cake backdrop, ring decor & photo corners.</p>
@@ -709,7 +720,7 @@
         </article>
 
         <article class="svc">
-          <div class="svcMedia" style="background-image:url('image/img4.jpg');"></div>
+          <div class="svcMedia" style="background-image:url('image/7.jpg');"></div>
           <div class="svcInner">
             <h3>Ceremony Themes</h3>
             <p>Sreemantha, baby naming, house warming, engagement & more — custom themes.</p>
@@ -798,49 +809,50 @@
   </section>
 
   <section id="portfolio" class="anchor">
-    <div class="container">
-      <div class="galleryHeader sec-head-anim">
-        <div>
-          <div class="title">Portfolio</div>
-          <div class="kicker" style="margin-bottom:8px;">Our Event Gallery</div>
-          <p class="sub" style="margin-bottom:0;">Click any image to view details.</p>
-        </div>
-        <button class="btn primary js-open-form" data-context="Quote from Portfolio"><i class="fa-solid fa-wand-magic-sparkles"></i> Get Quote</button>
-      </div>
-
-
-      <div class="galleryGrid" id="galleryGrid">
-        
-        <div class="gItem" data-src="image/img1.jpg">
-          <div class="thumb"><img src="image/img1.jpg" alt="Wedding"></div>
-          <div class="gOverlay"><b>Wedding</b><span>View</span></div>
+    <div class="galleryHeader sec-head-anim">
+      <div class="container">
+        <div class="galleryHeader" style="padding-bottom: 20px;">
+          <div>
+            <div class="title">Portfolio</div>
+            <div class="kicker" style="margin-bottom:8px;">Our Event Gallery</div>
+            <p class="sub" style="margin-bottom:0;">Click any image to see full gallery for that category.</p>
+          </div>
+          <button class="btn primary js-open-form" data-context="Quote from Portfolio"><i class="fa-solid fa-wand-magic-sparkles"></i> Get Quote</button>
         </div>
         
-        <div class="gItem" data-src="image/img5.jpg">
-          <div class="thumb"><img src="image/img5.jpg" alt="Birthday"></div>
-          <div class="gOverlay"><b>Birthday</b><span>View</span></div>
-        </div>
+        <div class="galleryGrid" id="galleryGrid">
+          
+          <div class="gItem" data-category="wedding">
+            <div class="thumb"><img src="marriege/1.jpg" alt="Wedding"></div>
+            <div class="gOverlay"><b>Wedding</b><span>View Gallery</span></div>
+          </div>
+          
+          <div class="gItem" data-category="birthday">
+            <div class="thumb"><img src="birthday/1.jpg" alt="Birthday"></div>
+            <div class="gOverlay"><b>Birthday</b><span>View Gallery</span></div>
+          </div>
 
-        <div class="gItem" data-src="image/img3.jpg">
-          <div class="thumb"><img src="image/img3.jpg" alt="Baby Shower"></div>
-          <div class="gOverlay"><b>Baby Shower</b><span>View</span></div>
-        </div>
+          <div class="gItem" data-category="babyshower">
+            <div class="thumb"><img src="otherevents/3.jpg" alt="Baby Shower"></div>
+            <div class="gOverlay"><b>Baby Shower</b><span>View Gallery</span></div>
+          </div>
 
-        <div class="gItem" data-src="image/img6.jpg">
-          <div class="thumb"><img src="image/img6.jpg" alt="Naming"></div>
-          <div class="gOverlay"><b>Naming</b><span>View</span></div>
-        </div>
+          <div class="gItem" data-category="naming">
+            <div class="thumb"><img src="image/img4.jpg" alt="Naming"></div>
+            <div class="gOverlay"><b>Naming</b><span>View Gallery</span></div>
+          </div>
 
-        <div class="gItem" data-src="image/img7.jpg">
-          <div class="thumb"><img src="image/img7.jpg" alt="House Warming"></div>
-          <div class="gOverlay"><b>House Warming</b><span>View</span></div>
-        </div>
-        
-        <div class="gItem" data-src="image/img.jpg">
-          <div class="thumb"><img src="image/img.jpg" alt="Anniversary"></div>
-          <div class="gOverlay"><b>Anniversary</b><span>View</span></div>
-        </div>
+          <div class="gItem" data-category="housewarming">
+            <div class="thumb"><img src="enternce/3.jpg" alt="House Warming"></div>
+            <div class="gOverlay"><b>Entrance</b><span>View Gallery</span></div>
+          </div>
+          
+          <div class="gItem" data-category="anniversary">
+            <div class="thumb"><img src="image/img.jpg" alt="Anniversary"></div>
+            <div class="gOverlay"><b>Anniversary</b><span>View Gallery</span></div>
+          </div>
 
+        </div>
       </div>
     </div>
   </section>
@@ -878,19 +890,19 @@
             <div class="review-name">DARSHAN L</div>
           </div>
 
-           <div class="review-card">
+            <div class="review-card">
             <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
             <p class="review-text">"Good service, pricing and amazing experience with their team"</p>
             <div class="review-name">ASHISH MV</div>
           </div>
 
-           <div class="review-card">
+            <div class="review-card">
             <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
             <p class="review-text">"Excellent service with feasible amount, i liked it very much..."</p>
             <div class="review-name">BHAVYA VINOD</div>
           </div>
 
-           <div class="review-card">
+            <div class="review-card">
             <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
             <p class="review-text">"Budget friendly event manager Hard working company nice experience"</p>
             <div class="review-name">HARIPRIYA</div>
@@ -924,24 +936,24 @@
       <div class="contactGrid">
         <div class="card contactInfo">
           <div class="map">
-            <iframe
-              title="Google Map"
-              width="100%" height="100%"
-              style="border:0;"
-              loading="lazy" allowfullscreen
+            <iframe 
+              title="Google Map" 
+              width="100%" height="100%" 
+              style="border:0;" 
+              loading="lazy" allowfullscreen 
               src="https://maps.google.com/maps?q=Bangalore&t=&z=13&ie=UTF8&iwloc=&output=embed">
             </iframe>
           </div>
 
           <div class="contactPad">
-            <div class="line"><i class="fa-solid fa-location-dot"></i> Bangalore Service across your area</div>
-            <div class="line"><i class="fa-solid fa-phone"></i> +91 9900062239</div>
-            <div class="line"><i class="fa-solid fa-envelope"></i> yourmail@gmail.com</div>
+            <div class="line"><i class="fa-solid fa-location-dot"></i> D group, 3rd cross, main road, NC Layout, Andrahalli, Lingadeeranhalli, Bengaluru, Karnataka 560091</div>
+            <div class="line"><i class="fa-solid fa-phone"></i> +91 8892378346</div>
+            <div class="line"><i class="fa-solid fa-envelope"></i> dot2dotevents@gmail.com</div>
             <div class="line"><i class="fa-solid fa-clock"></i> Mon–Sun: 9:00 AM – 9:00 PM</div>
 
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
               <button class="btn primary js-open-form" data-context="Quick Enquiry (Contact)"><i class="fa-solid fa-calendar-check"></i> Book Event</button>
-              <a class="btn" href="https://wa.me/919900062239" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+              <a class="btn" href="https://wa.me/918892378346" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
             </div>
 
             <div class="socials">
@@ -1001,6 +1013,10 @@
               <label>Message</label>
               <textarea name="message" placeholder="message"></textarea>
             </div>
+            
+            <input type="hidden" name="context" value="Contact Section Form" />
+            
+            <input type="hidden" name="sheetName" value="Contact" />
 
             <button class="btn primary" type="submit" style="width:100%;">
               <i class="fa-solid fa-paper-plane"></i> Send Enquiry
@@ -1047,9 +1063,9 @@
         <div>
           <div class="footTitle">Contact</div>
           <div class="footLinks">
-            <a href="tel:919900062239"><i class="fa-solid fa-phone"></i>+91 9900062239</a>
-            <a href="mailto:yourmail@gmail.com"><i class="fa-solid fa-envelope"></i> yourmail@gmail.com</a>
-            <a href="#contact"><i class="fa-solid fa-location-dot"></i> Bangalore</a>
+            <a href="tel:918892378346"><i class="fa-solid fa-phone"></i>+91 8892378346</a>
+            <a href="mailto:dot2dotevents@gmail.com"><i class="fa-solid fa-envelope"></i> dot2dotevents@gmail.com</a>
+            <a href="#contact"><i class="fa-solid fa-location-dot"></i> D group, 3rd cross, main road, NC Layout, Andrahalli, Lingadeeranhalli, Bengaluru, Karnataka 560091</a>
             <a class="js-open-form" data-context="Book Event (Footer)" href="javascript:void(0)"><i class="fa-solid fa-calendar-check"></i> Book Event</a>
           </div>
         </div>
@@ -1149,6 +1165,9 @@
               </div>
             </div>
             <input type="hidden" name="context" id="formContext" value="Book Event" />
+            
+            <input type="hidden" name="sheetName" value="Enquiry" />
+
             <button class="btn primary" type="submit" style="width:100%;">
               <i class="fa-solid fa-paper-plane"></i> Submit Enquiry
             </button>
@@ -1159,87 +1178,96 @@
   </div>
 
   <script>
-    // 1. REGISTER GSAP
+    /* =========================================
+       1. ADD YOUR IMAGE PATHS HERE
+       ========================================= */
+    const galleryContent = {
+      "wedding": [
+        "marriege/4.jpg", 
+        "marriege/6.jpg", 
+        "marriege/3.jpg", 
+        "marriege/4.jpg",
+        "marriege/5.jpg"
+      ],
+      "birthday": [
+        "birthday/1.jpg",
+        "birthday/2.jpg",
+        "birthday/3.jpg",
+        "birthday/4.jpg",
+        "birthday/5.jpg"
+      ],
+      "babyshower": [
+        "otherevents/1.jpg",
+        "otherevents/2.jpg",
+        "otherevents/3.jpg"
+      ],
+      "naming": [
+        "image/naming.jpeg",
+        "image/img4.jpg"
+      ],
+      "housewarming": [
+        "enternce/4.jpg",
+        "enternce/5.jpg",
+        "enternce/3.jpg"
+      ],
+      "anniversary": [
+        "image/img.jpg"
+      ]
+    };
+
+    /* =========================================
+       2. PASTE YOUR GOOGLE SCRIPT URL HERE
+       ========================================= */
+    // REPLACE THIS URL WITH THE ONE YOU COPIED FROM GOOGLE APPS SCRIPT
+    const scriptURL = 'PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE'; 
+
+    
+    /* =========================================
+       ANIMATIONS & LOGIC (GSAP & Forms)
+       ========================================= */
+    
+    // GSAP Register
     gsap.registerPlugin(ScrollTrigger);
 
-    // 2. HERO ANIMATIONS (Load sequence)
+    // Hero Animations
     const tlHero = gsap.timeline();
     tlHero.from(".hero-anim", {
-      y: 40,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.15,
-      ease: "power3.out"
+      y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out"
     });
 
-    // 3. SECTION HEADERS (Title/Sub fade up)
+    // Section Headers
     gsap.utils.toArray('.sec-head-anim').forEach(header => {
       gsap.from(header.children, {
-        scrollTrigger: {
-          trigger: header,
-          start: "top 85%",
-        },
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "power2.out"
+        scrollTrigger: { trigger: header, start: "top 85%" },
+        y: 30, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power2.out"
       });
     });
 
-    // 4. SERVICES (Staggered Card Popup)
+    // Services
     gsap.from(".svc", {
-      scrollTrigger: {
-        trigger: ".servicesGrid",
-        start: "top 80%",
-      },
-      y: 60,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.2,
-      ease: "back.out(1.7)"
+      scrollTrigger: { trigger: ".servicesGrid", start: "top 80%" },
+      y: 60, opacity: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.7)"
     });
 
-    // NEW: PACKAGES ANIMATION (Cards Slide Up)
+    // Packages
     gsap.from(".pkgCard", {
-      scrollTrigger: {
-        trigger: "#packages",
-        start: "top 75%",
-      },
-      y: 80,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.2,
-      ease: "power2.out"
+      scrollTrigger: { trigger: "#packages", start: "top 75%" },
+      y: 80, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power2.out"
     });
 
-    // 5. PILLS (Staggered Fade)
+    // Pills
     gsap.from(".pill", {
-      scrollTrigger: {
-        trigger: ".pills",
-        start: "top 90%",
-      },
-      scale: 0.8,
-      opacity: 0,
-      duration: 0.5,
-      stagger: 0.05,
-      ease: "power2.out"
+      scrollTrigger: { trigger: ".pills", start: "top 90%" },
+      scale: 0.8, opacity: 0, duration: 0.5, stagger: 0.05, ease: "power2.out"
     });
 
-    // 6. PORTFOLIO (Grid Fade In)
+    // Portfolio
     gsap.from(".gItem", {
-      scrollTrigger: {
-        trigger: "#portfolio",
-        start: "top 75%",
-      },
-      y: 40,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: "power2.out"
+      scrollTrigger: { trigger: "#portfolio", start: "top 75%" },
+      y: 40, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power2.out"
     });
 
-    // 7. ABOUT SECTION (Left/Right Slide)
+    // About
     if (window.innerWidth > 600) {
       gsap.from(".aboutCard", {
         scrollTrigger: { trigger: ".aboutGrid", start: "top 75%" },
@@ -1256,19 +1284,13 @@
       });
     }
 
-    // 8. CTA BAND (Scale Up)
+    // CTA
     gsap.from(".ctaInner", {
-      scrollTrigger: {
-        trigger: ".ctaBand",
-        start: "top 80%",
-      },
-      scale: 0.9,
-      opacity: 0,
-      duration: 0.8,
-      ease: "power2.out"
+      scrollTrigger: { trigger: ".ctaBand", start: "top 80%" },
+      scale: 0.9, opacity: 0, duration: 0.8, ease: "power2.out"
     });
 
-    // 9. CONTACT SECTION (Left/Right Slide)
+    // Contact
     if (window.innerWidth > 600) {
         gsap.from(".contactInfo", {
         scrollTrigger: { trigger: ".contactGrid", start: "top 75%" },
@@ -1285,7 +1307,7 @@
         });
     }
 
-    // 10. BUTTONS (Magnetic/Hover Effect)
+    // Buttons
     document.querySelectorAll(".btn").forEach(btn => {
       btn.addEventListener("mouseenter", () => {
         gsap.to(btn, { scale: 1.05, duration: 0.3, ease: "power1.out" });
@@ -1296,7 +1318,7 @@
     });
 
     /* =========================================
-       EXISTING FUNCTIONALITY (Lightbox, Nav, etc.)
+       FUNCTIONALITY
        ========================================= */
 
     // Year Update
@@ -1321,7 +1343,7 @@
     hamburger?.addEventListener("click", () => toggleMenu());
     document.querySelectorAll(".js-nav-close").forEach(a => a.addEventListener("click", () => toggleMenu(false)));
 
-    // Active Nav Highlight
+    // Active Nav
     const navLinks = Array.from(document.querySelectorAll("#menu a"));
     const sections = ["services","packages","events","portfolio","reviews","about","contact"].map(id => document.getElementById(id)).filter(Boolean);
     const setActive = (id) => navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
@@ -1331,17 +1353,13 @@
     }, { threshold: 0.25 }); 
     sections.forEach(s => io.observe(s));
 
-    // ==========================================
-    //  UPDATED LIGHTBOX LOGIC (Cycle All 6 Images)
-    // ==========================================
+    // Lightbox Logic
     const lb = document.getElementById("lightbox");
     const lbImg = document.getElementById("lbImg");
     const lbThumbs = document.getElementById("lbThumbs");
     const lbClose = document.getElementById("lbClose");
     const lbPrev = document.getElementById("lbPrev");
     const lbNext = document.getElementById("lbNext");
-    
-    // Select all visible gallery items (no filter anymore)
     const galleryItems = document.querySelectorAll(".gItem");
     
     let currentImages = [], currentIndex = 0;
@@ -1368,18 +1386,16 @@
       }, 120);
     }
 
-    function openLightbox(startSrc){
-      // 1. Gather all currently visible images
-      currentImages = Array.from(galleryItems).map(item => item.dataset.src);
-      
-      // 2. Find index of clicked image
-      currentIndex = currentImages.indexOf(startSrc);
-      if(currentIndex === -1) currentIndex = 0;
-
-      // 3. Show
+    function openLightbox(category){
+      currentImages = galleryContent[category] || [];
+      if(currentImages.length === 0) {
+        alert("No images uploaded for this category yet.");
+        return;
+      }
+      currentIndex = 0;
       lb.classList.add("show");
       lb.setAttribute("aria-hidden","false");
-      lbImg.src = currentImages[currentIndex] || "";
+      lbImg.src = currentImages[0] || "";
       lbImg.style.opacity = 1;
       buildThumbs();
       gsap.fromTo(".lbPanel", {scale:0.9, opacity:0}, {scale:1, opacity:1, duration:0.3});
@@ -1390,11 +1406,10 @@
       lb.setAttribute("aria-hidden","true");
     }
 
-    // Attach Click Event to Grid Items
     galleryItems.forEach((item)=>{
       item.addEventListener("click", ()=>{
-        const src = item.dataset.src;
-        openLightbox(src);
+        const category = item.getAttribute("data-category");
+        openLightbox(category);
       });
     });
 
@@ -1403,14 +1418,13 @@
     lbNext.addEventListener("click", ()=>showIndex(currentIndex+1));
     lb.addEventListener("click", (e)=>{ if(e.target===lb) closeLightbox(); });
 
-    // Review Auto Scroll
+    // Review Scroll
     const sliderWindow = document.getElementById("sliderWindow");
     if(sliderWindow) {
       let scrollAmount = 0;
       const cardWidth = 320; 
       setInterval(() => {
         if(sliderWindow.matches(':hover')) return;
-
         if(scrollAmount >= sliderWindow.scrollWidth - sliderWindow.clientWidth) {
           scrollAmount = 0;
           sliderWindow.scrollTo({ left: 0, behavior: 'smooth' });
@@ -1421,7 +1435,7 @@
       }, 3000);
     }
 
-    // Modal Form Logic
+    // Modal
     const formModal = document.getElementById("formModal");
     const modalClose = document.getElementById("modalClose");
 
@@ -1451,14 +1465,42 @@
     modalClose.addEventListener("click", closeForm);
     formModal.addEventListener("click", (e)=>{ if(e.target===formModal) closeForm(); });
 
-    document.getElementById("popupForm").addEventListener("submit",(e)=>{
+    // ------------------------------------------
+    // GOOGLE SHEETS SUBMISSION LOGIC (Reused)
+    // ------------------------------------------
+    function submitToGoogleSheet(formElement) {
+      const btn = formElement.querySelector("button[type='submit']");
+      const originalText = btn.innerHTML;
+      
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+      btn.disabled = true;
+
+      fetch(scriptURL, { method: 'POST', body: new FormData(formElement) })
+        .then(response => {
+           alert("Thank you! Your enquiry has been sent successfully.");
+           formElement.reset();
+           if(formElement.id === 'popupForm') closeForm();
+        })
+        .catch(error => {
+           console.error('Error!', error.message);
+           alert("Something went wrong. Please call us directly.");
+        })
+        .finally(() => {
+           btn.innerHTML = originalText;
+           btn.disabled = false;
+        });
+    }
+
+    // Attach to Popup Form
+    document.getElementById("popupForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      alert("Submitted! We will contact you soon.");
-      closeForm();
+      submitToGoogleSheet(document.getElementById("popupForm"));
     });
-    document.getElementById("contactForm").addEventListener("submit",(e)=>{
+
+    // Attach to Contact Section Form
+    document.getElementById("contactForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      alert("Submitted! We will contact you soon.");
+      submitToGoogleSheet(document.getElementById("contactForm"));
     });
 
   </script>
