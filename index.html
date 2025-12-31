@@ -9,10 +9,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-<link rel="icon" type="image/png" href="image/logo.png">
+  <link rel="icon" type="image/png" href="image/logo.png">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
     /* =======================
@@ -149,7 +151,9 @@
       .menu { display: none; }
       .hamburger { display: inline-flex; }
       .logo { width: 140px; height: 40px; }
-      .btn.primary { display: none; }
+      
+      /* FIXED: Only hide the primary button in the NAVBAR, not the whole page */
+      .navActions .btn.primary { display: none; }
     }
 
     /* =======================
@@ -352,7 +356,6 @@
         box-shadow: var(--shadowSoft); cursor: pointer; 
     }
     
-    /* UPDATED: Thumbnails show FULL image (COVER) with NO Black Background */
     .thumb { 
       height: 260px; /* Fixed height for uniformity */
       overflow: hidden; 
@@ -362,7 +365,7 @@
     .gItem img { 
       width: 100%; 
       height: 100%; 
-      object-fit: cover; /* CHANGED FROM CONTAIN TO COVER */
+      object-fit: cover; 
       transition: transform 0.4s ease; 
     }
     .gItem:hover img { transform: scale(1.05); }
@@ -376,27 +379,47 @@
     .gOverlay span { font-size: 10px; padding: 4px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(4px); }
 
     /* =======================
-       REVIEWS (MOBILE FIXED)
+       REVIEWS
        ======================= */
     .reviewsStrip {
       padding: 40px 0; background: #F9FBFF;
       border-top: 1px solid rgba(255, 255, 255, 0.55); border-bottom: 1px solid rgba(255, 255, 255, 0.55);
       overflow: hidden; 
     }
-    .slider-window { width: 100%; margin-top: 24px; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
-    .slider-window::-webkit-scrollbar { display: none; }
+    .slider-window { 
+      width: 100%; 
+      margin-top: 24px; 
+      overflow: hidden; 
+      padding: 10px 0 40px 0; /* Extra bottom pad for shadows */
+    }
     
-    .slider-track { display: flex; gap: 20px; width: max-content; padding: 10px 4px 20px 4px; }
+    .slider-track { 
+      display: flex; 
+      gap: 20px; 
+      width: 100%; 
+      transition: transform 0.5s ease-in-out; 
+    }
     
     .review-card {
       background: #fff; padding: 24px 20px; border-radius: 18px; text-align: center;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04); display: flex; flex-direction: column;
       align-items: center; justify-content: space-between; 
-      flex-shrink: 0;
       border: 1px solid rgba(0,0,0,0.03);
-      
-      width: 320px;
-      max-width: 85vw;
+      flex: 0 0 calc((100% - 40px) / 3);
+      width: auto;
+      max-width: none;
+    }
+    
+    @media (max-width: 900px) {
+      .review-card {
+        flex: 0 0 calc((100% - 20px) / 2);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .review-card {
+        flex: 0 0 100%;
+      }
     }
 
     .review-text { color: #333; font-style: italic; line-height: 1.5; margin-bottom: 16px; font-size: 13.5px; }
@@ -565,14 +588,28 @@
 
     .modal { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center; padding: 10px; background: rgba(11, 14, 20, 0.75); backdrop-filter: blur(6px); }
     .modal.show { display: flex; }
+    
+    /* MODAL SCROLL FIX */
     .modalPanel {
-      width: min(420px, 94vw); /* Compact Form */
-      border-radius: 18px; overflow: hidden; background: #fff; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 0, 0, 0.08); 
+      width: min(420px, 94vw); 
+      max-height: 90vh; 
+      display: flex;
+      flex-direction: column;
+      border-radius: 18px; overflow: hidden; background: #fff; 
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 0, 0, 0.08); 
     }
-    .modalTop { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 20px; border-bottom: 1px solid rgba(0, 0, 0, 0.08); background: #f9f9f9; }
+    .modalTop { 
+        flex-shrink: 0; 
+        display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 20px; border-bottom: 1px solid rgba(0, 0, 0, 0.08); background: #f9f9f9; 
+    }
     .xBtn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, 0.1); background: #fff; cursor: pointer; display: grid; place-items: center; font-size: 13px; color: #555; }
     .xBtn:hover { background: var(--accent); color: #fff; }
-    .modalBody { padding: 20px; background: #fff; }
+    
+    .modalBody { 
+        padding: 20px; background: #fff; 
+        overflow-y: auto; 
+        flex: 1;
+    }
     .input-wrap { position: relative; }
     .input-wrap .icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 12px; pointer-events: none; }
     .input-wrap .textarea-icon { top: 12px; transform: none; }
@@ -1419,22 +1456,56 @@
     lbNext.addEventListener("click", ()=>showIndex(currentIndex+1));
     lb.addEventListener("click", (e)=>{ if(e.target===lb) closeLightbox(); });
 
-    // Review Scroll
-    const sliderWindow = document.getElementById("sliderWindow");
-    if(sliderWindow) {
-      let scrollAmount = 0;
-      const cardWidth = 320; 
-      setInterval(() => {
-        if(sliderWindow.matches(':hover')) return;
-        if(scrollAmount >= sliderWindow.scrollWidth - sliderWindow.clientWidth) {
-          scrollAmount = 0;
-          sliderWindow.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          scrollAmount += cardWidth;
-          sliderWindow.scrollTo({ left: scrollAmount, behavior: 'smooth' });
-        }
-      }, 3000);
+    // ==========================================
+    // TESTIMONIAL SLIDER LOGIC
+    // ==========================================
+    const track = document.getElementById("sliderTrack");
+    const cards = document.querySelectorAll(".review-card");
+    
+    let slideIndex = 0;
+    const slideInterval = 3000; // 3 seconds per slide
+
+    function getItemsPerScreen() {
+      if (window.innerWidth <= 600) return 1; // Mobile
+      if (window.innerWidth <= 900) return 2; // Tablet
+      return 3; // Desktop
     }
+
+    function moveSlider() {
+      const itemsPerScreen = getItemsPerScreen();
+      const totalCards = cards.length;
+      const gap = 20; // Must match CSS gap
+      
+      // Increment index
+      slideIndex++;
+
+      // Reset if we reach the end (Infinite loop effect logic)
+      if (slideIndex > totalCards - itemsPerScreen) {
+        slideIndex = 0;
+      }
+
+      // Calculate width of one card dynamically
+      const cardWidth = cards[0].offsetWidth;
+      
+      // Calculate translate distance
+      const moveAmount = (cardWidth + gap) * slideIndex;
+
+      track.style.transform = `translateX(-${moveAmount}px)`;
+    }
+
+    // Start Auto Play
+    let autoPlay = setInterval(moveSlider, slideInterval);
+
+    // Pause on Hover
+    const sliderContainer = document.getElementById("sliderWindow");
+    sliderContainer.addEventListener("mouseenter", () => clearInterval(autoPlay));
+    sliderContainer.addEventListener("mouseleave", () => autoPlay = setInterval(moveSlider, slideInterval));
+
+    // Handle Window Resize (Reset position)
+    window.addEventListener("resize", () => {
+      slideIndex = 0;
+      track.style.transform = `translateX(0px)`;
+    });
 
     // Modal
     const formModal = document.getElementById("formModal");
@@ -1467,24 +1538,38 @@
     formModal.addEventListener("click", (e)=>{ if(e.target===formModal) closeForm(); });
 
     // ------------------------------------------
-    // GOOGLE SHEETS SUBMISSION LOGIC (Reused)
+    // UPDATED: SUBMISSION LOGIC WITH SWEETALERT
     // ------------------------------------------
     function submitToGoogleSheet(formElement) {
       const btn = formElement.querySelector("button[type='submit']");
       const originalText = btn.innerHTML;
       
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+      // Loading State
+      btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Sending...';
       btn.disabled = true;
 
       fetch(scriptURL, { method: 'POST', body: new FormData(formElement) })
         .then(response => {
-           alert("Thank you! Your enquiry has been sent successfully.");
+           // Success Alert (SweetAlert2)
+           Swal.fire({
+             title: "Enquiry Sent!",
+             text: "We will contact you shortly.",
+             icon: "success",
+             confirmButtonColor: "#0498D5",
+             confirmButtonText: "Great!"
+           });
            formElement.reset();
            if(formElement.id === 'popupForm') closeForm();
         })
         .catch(error => {
            console.error('Error!', error.message);
-           alert("Something went wrong. Please call us directly.");
+           // Error Alert (SweetAlert2)
+           Swal.fire({
+             title: "Error",
+             text: "Something went wrong. Please try WhatsApp.",
+             icon: "error",
+             confirmButtonColor: "#d33"
+           });
         })
         .finally(() => {
            btn.innerHTML = originalText;
