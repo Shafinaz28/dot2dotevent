@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | Dot2Dot Events</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0498D5',    // Blue
+                        accent: '#E20D82',     // Pink
+                        highlight: '#FBEB02',  // Yellow
+                        bg: '#EAF0FF',         // Light Blue BG
+                        head: '#12162A',       // Dark Headings
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #EAF0FF; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+    </style>
+</head>
+
+<body class="font-sans text-slate-800">
+
+    <nav class="p-6">
+        <div class="flex justify-between items-center">
+                    <img src="image/logo.png" alt="Dot2Dot Events Logo"
+                        class="h-12 md:h-20 w-auto object-contain transition-transform group-hover:scale-105">
+                
+                <button onclick="openModal()"
+                    class="bg-primary text-white px-6 py-3 rounded-[20px] text-xs font-bold uppercase hover:bg-accent transition-colors duration-300 shadow-custom hover:shadow-soft">
+                    Get Quote
+                </button>
+            </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <div class="glass rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-highlight opacity-20 rounded-full"></div>
+            
+            <header class="mb-10 relative">
+                <h1 class="font-serif text-4xl md:text-5xl text-head mb-4">Privacy Policy</h1>
+                <div class="w-20 h-1.5 bg-accent rounded-full mb-6"></div>
+                <p class="text-sm font-semibold uppercase tracking-widest text-primary">Last updated: January 2026</p>
+            </header>
+
+            <section class="space-y-8 leading-relaxed">
+                <p class="text-lg italic text-slate-600">
+                    We respect your privacy and are committed to protecting your personal information. This policy explains how we handle your data when you celebrate with us.
+                </p>
+
+                <div>
+                    <h3 class="text-xl font-bold text-head flex items-center mb-3">
+                        <i class="fas fa-database text-primary mr-3"></i> Information We Collect
+                    </h3>
+                    <ul class="list-disc ml-6 space-y-2 text-slate-700">
+                        <li>Personal details: name, email, phone number, and event details provided via forms.</li>
+                        <li>Non-personal: browser type, device info, and IP address for site optimization.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold text-head flex items-center mb-3">
+                        <i class="fas fa-magic text-primary mr-3"></i> How We Use Your Information
+                    </h3>
+                    <p class="mb-3">We use the collected information to:</p>
+                    <ul class="list-disc ml-6 space-y-2 text-slate-700">
+                        <li>Respond to your inquiries and plan your decorations.</li>
+                        <li>Improve our website and user experience.</li>
+                        <li>Send updates or festive offers (only with your consent).</li>
+                    </ul>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white/50 p-6 rounded-2xl border border-white">
+                        <h3 class="font-bold text-head mb-2"><i class="fas fa-cookie-bite text-accent mr-2"></i> Cookies</h3>
+                        <p class="text-sm">We use cookies to understand how you use our site. You can disable these in your browser settings anytime.</p>
+                    </div>
+                    <div class="bg-white/50 p-6 rounded-2xl border border-white">
+                        <h3 class="font-bold text-head mb-2"><i class="fas fa-shield-alt text-accent mr-2"></i> Data Protection</h3>
+                        <p class="text-sm">We take security seriously, though no method of internet transmission is 100% secure.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold text-head mb-3">Third-Party Links & Consent</h3>
+                    <p class="text-slate-700">
+                        Our site may link to others; we aren't responsible for their privacy practices. By using our website, you consent to this Privacy Policy.
+                    </p>
+                </div>
+
+                <div class="pt-8 border-t border-slate-200">
+                    <h3 class="text-xl font-bold text-head mb-3">Contact Us</h3>
+                    <p class="text-slate-700 mb-4">Have questions about your data? Reach out to our Bangalore team.</p>
+                    <a href="mailto:contact@dot2dotevents.com" class="inline-block bg-primary text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-accent transition-all transform hover:-translate-y-1">
+                        Email Privacy Officer
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="text-center py-10 text-slate-500 text-sm">
+        <p>&copy; 2026 Dot2Dot Events Bangalore. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
