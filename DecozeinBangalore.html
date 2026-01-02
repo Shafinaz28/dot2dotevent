@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot2Dot Events | Balloon & Flower Decor</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+        
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0498D5',    // Blue
+                        accent: '#E20D82',     // Pink
+                        highlight: '#FBEB02',  // Yellow
+                        bg: '#EAF0FF',         // Light Blue BG
+                        head: '#12162A',       // Dark Headings
+                        text: '#0B0E14',       // Body Text
+                        surface: 'rgba(255, 255, 255, 0.72)',
+                        surface2: 'rgba(255, 255, 255, 0.52)',
+                        muted: 'rgba(18, 22, 42, 0.64)',
+                        border: 'rgba(11, 14, 20, 0.10)',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'custom': '20px',
+                        'arch': '150px 150px 20px 20px',
+                    },
+                    boxShadow: {
+                        'custom': '0 18px 44px rgba(11, 14, 20, 0.14)',
+                        'soft': '0 10px 30px rgba(11, 14, 20, 0.10)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #EAF0FF;
+            color: #0B0E14;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Confetti/Petals */
+        .petal {
+            position: absolute;
+            background-color: #0498D5;
+            border-radius: 50%;
+            opacity: 0.6;
+            z-index: -1;
+            animation: falling linear infinite;
+        }
+
+        @keyframes falling {
+            0% {
+                transform: translate(0, -10vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(100px, 110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Reveal Animation */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #EAF0FF;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #0498D5;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased">
+
+    <div id="petals-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <header class="relative min-h-screen flex flex-col pt-4 md:pt-6 pb-12">
+        <div class="container mx-auto px-6 mb-8 md:mb-12">
+            <div class="flex justify-between items-center">
+                <a href="https://dot2dotevents.com/" class="flex items-center gap-2 group">
+                    <img src="image/logo.png" alt="Dot2Dot Events Logo"
+                        class="h-12 md:h-20 w-auto object-contain transition-transform group-hover:scale-105">
+                </a>
+                <button onclick="openModal()"
+                    class="bg-primary text-white px-6 py-3 rounded-[20px] text-xs font-bold uppercase hover:bg-accent transition-colors duration-300 shadow-custom hover:shadow-soft">
+                    Get Quote
+                </button>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-6 flex-grow flex items-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full">
+                <div class="order-2 md:order-1 fade-up z-10 text-center md:text-left">
+                    <span
+                        class="text-accent font-semibold tracking-widest text-xs mb-4 block uppercase bg-accent/10 w-fit mx-auto md:mx-0 px-3 py-1 rounded-full">Premium
+                        Decoration Services</span>
+                    <h1 class="text-5xl md:text-7xl font-serif leading-[1.1] mb-6 text-head font-bold">
+                         Flower & Balloon <br>
+                        <span class="text-primary italic">Decoration</span>
+                    </h1>
+                    <p class="text-muted text-lg leading-relaxed max-w-md mx-auto md:mx-0 mb-8">
+                        We do complete decoration for all types of events: balloon arches, floral backdrops, entrance
+                        decor, stage setup, mandap, and custom themes.
+                    </p>
+                    <div class="flex flex-col md:flex-row gap-6 justify-center md:justify-start items-center">
+                        <button onclick="document.getElementById('services').scrollIntoView()"
+                            class="border-2 border-head text-head px-8 py-4 rounded-[20px] text-sm font-bold uppercase hover:bg-head hover:text-white transition-all duration-300 w-full md:w-auto shadow-soft">
+                            Explore Services
+                        </button>
+                        <div class="flex items-center gap-3">
+                            <div class="flex -space-x-3">
+                                <img src="https://randomuser.me/api/portraits/women/65.jpg"
+                                    class="w-10 h-10 rounded-full border-2 border-white">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg"
+                                    class="w-10 h-10 rounded-full border-2 border-white">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg"
+                                    class="w-10 h-10 rounded-full border-2 border-white">
+                            </div>
+                            <span class="text-sm font-bold text-muted">More than decor, we build the vibe.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2 relative fade-up mt-4 md:mt-0">
+                    <div
+                        class="relative w-full h-[350px] md:h-[550px] rounded-arch overflow-hidden shadow-custom animate-float border-[6px] border-white">
+                        <img src="otherevents/2.jpg" alt="Balloon Decoration" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-head/40 to-transparent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-16 bg-white/50">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="fade-up">
+                    <span class="text-primary text-xs font-bold uppercase tracking-widest">About Us</span>
+                    <h2 class="text-4xl font-serif text-head font-bold mt-2 mb-4">Why people choose us</h2>
+                    <p class="text-muted mb-6 leading-relaxed">
+                        Every event is unique. We help you pick colors, themes, and props then execute on time with a
+                        neat finish. We specialize in clean finishing and photo-ready designs.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-accent"></i><span
+                                class="text-text font-medium">Custom themes for every occasion</span></li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-accent"></i><span
+                                class="text-text font-medium">Premium balloon & flower options</span></li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-accent"></i><span
+                                class="text-text font-medium">Photo booth / Welcome board setups</span></li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-accent"></i><span
+                                class="text-text font-medium">Quick booking & On-time installation</span></li>
+                    </ul>
+                </div>
+                <div class="grid grid-cols-2 gap-4 fade-up">
+                    <div class="bg-white p-6 rounded-[20px] shadow-soft text-center">
+                        <i class="fas fa-camera text-3xl text-primary mb-3"></i>
+                        <h4 class="font-bold text-head">Photo Ready</h4>
+                        <p class="text-xs text-muted">Decoration that looks premium in photos.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-[20px] shadow-soft text-center">
+                        <i class="fas fa-paint-brush text-3xl text-highlight mb-3"></i>
+                        <h4 class="font-bold text-head">Custom Themes</h4>
+                        <p class="text-xs text-muted">We plan, design & execute end-to-end.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-white/50 overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="w-full md:w-1/2 relative fade-up">
+                    <div class="flex gap-4 items-center">
+                        <img src="otherevents/1.jpg"
+                            class="w-1/2 h-72 object-cover rounded-t-full rounded-b-2xl shadow-lg border-4 border-white">
+                        <img src="birthday/1.jpg"
+                            class="w-1/2 h-56 object-cover rounded-2xl shadow-lg border-4 border-white">
+                    </div>
+                    <div
+                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-highlight rounded-full flex items-center justify-center shadow-xl border-4 border-white z-10">
+                        <span class="font-serif italic text-2xl text-head font-bold">Love</span>
+                    </div>
+                    <div class="absolute -top-4 right-10 w-4 h-4 bg-primary rounded-full opacity-50"></div>
+                    <div class="absolute bottom-0 left-10 w-3 h-3 bg-accent rounded-full opacity-50"></div>
+                </div>
+                <div class="w-full md:w-1/2 fade-up">
+                    <i class="fas fa-quote-left text-4xl text-primary mb-6"></i>
+                    <h3 class="text-3xl md:text-4xl font-serif leading-tight mb-8 text-head font-medium">
+                        "We don't just decorate venues; we create the atmosphere where your most cherished memories are
+                        born."
+                    </h3>
+                    <div class="flex items-center gap-4">
+                        <div class="h-[2px] w-12 bg-accent"></div>
+                        <span class="text-sm font-bold uppercase tracking-widest text-primary">Dot2Dot Team</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-16 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 fade-up">
+                <span
+                    class="text-primary text-xs font-bold uppercase tracking-[0.2em] bg-primary/10 px-4 py-2 rounded-full">What
+                    We Do</span>
+                <h2 class="text-4xl md:text-5xl font-serif mt-6 text-head font-bold">Decoration that looks premium</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div
+                    class="group cursor-pointer fade-up bg-white p-4 rounded-[20px] shadow-soft hover:shadow-custom transition duration-300">
+                    <div class="h-60 rounded-[16px] overflow-hidden relative mb-6">
+                        <img src="image/9.jpg"
+                            class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    </div>
+                    <div class="px-2 pb-4">
+                        <h3 class="text-2xl font-serif mb-2 text-head group-hover:text-primary transition">Wedding &
+                            Reception</h3>
+                        <p class="text-sm text-muted">Stage, mandap, aisle decor, entry arch, floral panels & lighting
+                            coordination.</p>
+                    </div>
+                </div>
+                <div class="group cursor-pointer fade-up bg-white p-4 rounded-[20px] shadow-soft hover:shadow-custom transition duration-300"
+                    style="transition-delay: 100ms">
+                    <div class="h-60 rounded-[16px] overflow-hidden relative mb-6">
+                        <img src="birthday/3.jpg"
+                            class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    </div>
+                    <div class="px-2 pb-4">
+                        <h3 class="text-2xl font-serif mb-2 text-head group-hover:text-primary transition">Birthday /
+                            Surprise Decor</h3>
+                        <p class="text-sm text-muted">Balloon arches, name boards, cake backdrop, ring decor & photo
+                            corners.</p>
+                    </div>
+                </div>
+                <div class="group cursor-pointer fade-up bg-white p-4 rounded-[20px] shadow-soft hover:shadow-custom transition duration-300"
+                    style="transition-delay: 200ms">
+                    <div class="h-60 rounded-[16px] overflow-hidden relative mb-6">
+                        <img src="image/img4.jpg"
+                            class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    </div>
+                    <div class="px-2 pb-4">
+                        <h3 class="text-2xl font-serif mb-2 text-head group-hover:text-primary transition">Ceremony
+                            Themes</h3>
+                        <p class="text-sm text-muted">Sreemantha, baby naming, house warming, engagement & more — custom
+                            themes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10 flex flex-wrap justify-center gap-4 fade-up">
+                <span
+                    class="px-4 py-2 bg-white rounded-full text-xs font-bold uppercase shadow-sm text-muted">Anniversary</span>
+                <span class="px-4 py-2 bg-white rounded-full text-xs font-bold uppercase shadow-sm text-muted">Corporate
+                    Events</span>
+                <span class="px-4 py-2 bg-white rounded-full text-xs font-bold uppercase shadow-sm text-muted">Store
+                    Launch</span>
+                <span class="px-4 py-2 bg-white rounded-full text-xs font-bold uppercase shadow-sm text-muted">Festive
+                    Decor</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="py-16 bg-white/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10 fade-up">
+                <span class="text-accent text-xs font-bold uppercase tracking-widest">Gallery</span>
+                <h2 class="text-4xl font-serif text-head font-bold mt-2">Our Event Gallery</h2>
+                <p class="text-sm text-muted mt-2">Click any image to see full gallery for that category.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-auto md:h-[500px]">
+                <div
+                    class="col-span-2 row-span-2 relative group overflow-hidden rounded-[20px] fade-up h-60 md:h-auto cursor-pointer">
+                    <img src="image/img.jpg"
+                        class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                    <div
+                        class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                        <span class="text-white font-serif text-2xl">Anniversary</span>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden rounded-[20px] fade-up h-40 md:h-auto cursor-pointer">
+                    <img src="marriege/2.jpg"
+                        class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                    <div
+                        class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                        <span class="text-white font-serif text-xl">Wedding</span>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden rounded-[20px] fade-up h-40 md:h-auto cursor-pointer">
+                    <img src="image/img2.jpg"
+                        class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                    <div
+                        class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                        <span class="text-white font-serif text-xl">Entrance</span>
+                    </div>
+                </div>
+                <div
+                    class="col-span-2 relative group overflow-hidden rounded-[20px] fade-up h-40 md:h-auto cursor-pointer">
+                    <img src="birthday/4.jpg"
+                        class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                    <div
+                        class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                        <span class="text-white font-serif text-xl">Birthday</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="videos" class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10 fade-up">
+                <span class="text-primary text-xs font-bold uppercase tracking-widest">In Motion</span>
+                <h2 class="text-4xl font-serif text-head font-bold mt-2">Video Highlights</h2>
+                <p class="text-sm text-muted mt-2">Check out our latest work.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto fade-up">
+
+                <div class="relative w-full aspect-[9/16] bg-black rounded-[20px] overflow-hidden shadow-custom group border border-gray-100">
+                    <video class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                        controls playsinline loop>
+                        <source src="./videos/video1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    
+                </div>
+
+                <div class="relative w-full aspect-[9/16] bg-black rounded-[20px] overflow-hidden shadow-custom group border border-gray-100">
+                    <video class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                        controls playsinline loop>
+                        <source src="./videos/video2.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    
+                </div>
+
+                <div class="relative w-full aspect-[9/16] bg-black rounded-[20px] overflow-hidden shadow-custom group border border-gray-100">
+                    <video class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                        controls playsinline loop>
+                        <source src="./videos/video3.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-white/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 fade-up">
+                <span class="text-primary text-xs font-bold uppercase tracking-widest">Common Questions</span>
+                <h2 class="text-4xl font-serif text-head font-bold mt-2">FAQs on Decoration</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-bg p-6 rounded-[20px] fade-up shadow-soft">
+                    <h4 class="font-bold text-head text-lg flex items-center gap-3 mb-3">
+                        <i class="fas fa-question-circle text-primary"></i> Can you customize the theme?
+                    </h4>
+                    <p class="text-muted text-sm leading-relaxed pl-8">Yes! Every event is unique. We help you pick
+                        colors, themes, and props that match your specific vision and budget.</p>
+                </div>
+
+                <div class="bg-bg p-6 rounded-[20px] fade-up shadow-soft">
+                    <h4 class="font-bold text-head text-lg flex items-center gap-3 mb-3">
+                        <i class="fas fa-question-circle text-primary"></i> Do you use real flowers?
+                    </h4>
+                    <p class="text-muted text-sm leading-relaxed pl-8">We offer both premium artificial flowers
+                        (standard packages) and fresh real flowers (luxury packages).</p>
+                </div>
+
+                <div class="bg-bg p-6 rounded-[20px] fade-up shadow-soft">
+                    <h4 class="font-bold text-head text-lg flex items-center gap-3 mb-3">
+                        <i class="fas fa-question-circle text-primary"></i> How long does balloon decor last?
+                    </h4>
+                    <p class="text-muted text-sm leading-relaxed pl-8">Our premium balloons typically last 1-2 days
+                        indoors. For outdoor events, weather conditions may affect longevity.</p>
+                </div>
+
+                <div class="bg-bg p-6 rounded-[20px] fade-up shadow-soft">
+                    <h4 class="font-bold text-head text-lg flex items-center gap-3 mb-3">
+                        <i class="fas fa-question-circle text-primary"></i> Setup time?
+                    </h4>
+                    <p class="text-muted text-sm leading-relaxed pl-8">For standard birthdays, we need about 2-3 hours.
+                        For grand weddings, we may need 4-6 hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-16 bg-surface2 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 fade-up">
+                <span class="text-accent text-xs font-bold uppercase tracking-widest">Reviews</span>
+                <h2 class="text-4xl font-serif text-head font-bold mt-2">Happy Clients</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-[20px] shadow-soft fade-up">
+                    <div class="text-highlight mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="text-muted italic text-sm mb-4">"I wanted birthday decor for my 2 year baby girl and at
+                        last moment I reached out to Ranjith. He really made his work very nice and the decor was too
+                        good."</p>
+                    <h5 class="font-bold text-head text-sm uppercase">SNEHA GOWDA</h5>
+                </div>
+                <div class="bg-white p-6 rounded-[20px] shadow-soft fade-up" style="transition-delay: 100ms">
+                    <div class="text-highlight mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="text-muted italic text-sm mb-4">"Excellent service at economical prices we hired him for
+                        our house warming ceremony and the flower decor came out so beautiful."</p>
+                    <h5 class="font-bold text-head text-sm uppercase">ASHU DHARANA</h5>
+                </div>
+                <div class="bg-white p-6 rounded-[20px] shadow-soft fade-up" style="transition-delay: 200ms">
+                    <div class="text-highlight mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="text-muted italic text-sm mb-4">"Very professional, Ranjith would ensure he would give you
+                        an amazing quality in an affordable price. You can blindly trust these guys."</p>
+                    <h5 class="font-bold text-head text-sm uppercase">VARUN THARANATH</h5>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-primary overflow-hidden relative">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+        </div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="text-4xl font-serif text-white font-bold mb-4">Start Today</h2>
+            <p class="text-white/90 text-lg mb-8 max-w-2xl mx-auto">Want a perfect setup for your event? Send your
+                location, date, budget, theme, color. We’ll share the best decoration options.</p>
+            <button onclick="openModal()"
+                class="bg-highlight text-head px-10 py-4 rounded-[20px] font-bold uppercase shadow-lg hover:bg-white transition-all transform hover:scale-105">Book
+                Your Event</button>
+        </div>
+    </section>
+
+    <section id="contact" class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div
+                class="max-w-5xl mx-auto bg-white rounded-[20px] shadow-custom overflow-hidden flex flex-col md:flex-row fade-up border border-border">
+
+                <div
+                    class="w-full md:w-2/5 bg-head text-white p-8 md:p-12 relative overflow-hidden flex flex-col justify-between">
+                    <div
+                        class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-3xl font-serif mb-2 text-highlight">Contact Us</h3>
+                        <p class="text-white/60 text-sm mb-8">Share your occasion, date, and budget.</p>
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-primary shrink-0">
+                                    <i class="fas fa-map-marker-alt"></i></div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-white/50">Address</p>
+                                    <p class="font-semibold text-sm leading-relaxed">D group, 3rd cross, main road, NC
+                                        Layout, Andrahalli, Bengaluru 560091</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-accent shrink-0">
+                                    <i class="fas fa-phone"></i></div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-white/50">Phone</p>
+                                    <p class="font-semibold">+91 8892378346</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-highlight shrink-0">
+                                    <i class="fas fa-envelope"></i></div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-white/50">Email</p>
+                                    <p class="font-semibold">dot2dotevents23@gmail.com</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 pt-8 border-t border-white/10">
+                                <p class="text-xs uppercase tracking-widest text-white/50 mb-4">Connect with us</p>
+                                <div class="flex gap-4">
+                                    <a href="https://wa.me/918892378346" target="_blank"
+                                        class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-head text-xl hover:bg-[#25D366] hover:text-white transition-all duration-300 transform hover:scale-110 shadow-lg">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                    <a href="https://www.instagram.com/dot2dotevents" target="_blank"
+                                        class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-head text-xl hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:text-white transition-all duration-300 transform hover:scale-110 shadow-lg">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-3/5 bg-white p-8 md:p-12">
+                    <h3 class="font-serif text-3xl text-head font-bold mb-2">Book Your Event</h3>
+                    <p class="text-muted text-sm mb-6">We'll call you to confirm theme options.</p>
+                    <form name="submit-to-google-sheet-inline" class="space-y-4 contact-form">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="relative">
+                                <i
+                                    class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                                <input type="text" name="name" required placeholder="Name"
+                                    class="w-full bg-bg rounded-[12px] pl-12 pr-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white text-text">
+                            </div>
+                            <div class="relative">
+                                <i
+                                    class="fas fa-phone absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                                <input type="tel" name="phone" required placeholder="Phone"
+                                    class="w-full bg-bg rounded-[12px] pl-12 pr-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white text-text">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="relative">
+                                <i
+                                    class="fas fa-calendar-alt absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                                <input type="date" name="date"
+                                    class="w-full bg-bg rounded-[12px] pl-12 pr-5 py-4 text-sm text-muted focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white">
+                            </div>
+                            <div class="relative">
+                                <i
+                                    class="fas fa-glass-cheers absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                                <select name="occasion"
+                                    class="w-full bg-bg rounded-[12px] pl-12 pr-5 py-4 text-sm text-muted focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white appearance-none">
+                                    <option>Birthday</option>
+                                    <option>Wedding / Reception</option>
+                                    <option>Engagement</option>
+                                    <option>Baby Shower</option>
+                                    <option>Naming Ceremony</option>
+                                    <option>House Warming</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="relative">
+                                <i
+                                    class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                                <input type="email" name="email" required placeholder="Email"
+                                    class="w-full bg-bg rounded-[12px] pl-12 pr-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white text-text">
+                            </div>
+                            <div class="relative">
+                                <i
+                                    class="fas fa-rupee-sign absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                                <input type="text" name="budget" placeholder="Budget (Optional)"
+                                    class="w-full bg-bg rounded-[12px] pl-12 pr-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white text-text">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-comment absolute left-4 top-4 text-primary"></i>
+                            <textarea name="message" rows="3" placeholder="Message / Theme Idea"
+                                class="w-full bg-bg rounded-[12px] pl-12 pr-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white resize-none text-text"></textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-head text-white py-4 rounded-[12px] font-bold text-xs uppercase tracking-widest hover:bg-accent transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 submit-btn">
+                            Send Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <footer class="bg-head text-white pt-6 pb-6 border-t-4 border-primary">
+  <div class="container mx-auto px-6 text-center">
+
+    <!-- Top -->
+    <div class="text-white/40 text-xs tracking-widest uppercase mb-3">
+      © 2026 Dot2Dot Events. All rights reserved.
+    </div>
+
+    <!-- Bottom -->
+    <a href="#"
+       class="text-white/60 hover:text-highlight text-xs font-semibold uppercase tracking-widest transition-colors">
+      Privacy Policy
+    </a>
+
+  </div>
+</footer>
+
+    <div id="quoteModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-head/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        <div
+            class="bg-white w-full max-w-md rounded-[20px] shadow-2xl relative z-10 overflow-hidden transform transition-all scale-95 opacity-0 modal-anim">
+            <div class="bg-bg p-6 text-center relative border-b border-border">
+                <button onclick="closeModal()"
+                    class="absolute top-4 right-4 text-muted hover:text-head w-8 h-8 flex items-center justify-center rounded-full hover:bg-white transition"><i
+                        class="fas fa-times"></i></button>
+                <h3 class="font-serif text-2xl text-head font-bold">Book Event</h3>
+                <p class="text-muted text-xs mt-2">Send us your details</p>
+            </div>
+            <form name="submit-to-google-sheet-modal" class="p-6 space-y-4 contact-form">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="relative">
+                        <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                        <input type="text" name="name" required placeholder="Name"
+                            class="w-full bg-bg rounded-[12px] pl-12 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white">
+                    </div>
+                    <div class="relative">
+                        <i class="fas fa-phone absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                        <input type="tel" name="phone" required placeholder="Phone"
+                            class="w-full bg-bg rounded-[12px] pl-12 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="relative">
+                        <i
+                            class="fas fa-calendar-alt absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                        <input type="date" name="date"
+                            class="w-full bg-bg rounded-[12px] pl-12 pr-4 py-3 text-sm text-muted focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white">
+                    </div>
+                    <div class="relative">
+                        <i
+                            class="fas fa-glass-cheers absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                        <select name="occasion"
+                            class="w-full bg-bg rounded-[12px] pl-12 pr-4 py-3 text-sm text-muted focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white appearance-none">
+                            <option>Birthday</option>
+                            <option>Wedding / Reception</option>
+                            <option>Engagement</option>
+                            <option>Baby Shower</option>
+                            <option>Naming Ceremony</option>
+                            <option>House Warming</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="relative">
+                    <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-primary"></i>
+                    <input type="email" name="email" required placeholder="Email"
+                        class="w-full bg-bg rounded-[12px] pl-12 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white">
+                </div>
+                <div class="relative">
+                    <i class="fas fa-comment absolute left-4 top-4 text-primary"></i>
+                    <textarea name="message" rows="3" placeholder="Message / Budget"
+                        class="w-full bg-bg rounded-[12px] pl-12 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:bg-white resize-none"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-head text-white py-4 rounded-[12px] font-bold text-xs uppercase tracking-widest hover:bg-accent transition-colors shadow-lg submit-btn">
+                    Send Request
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. FALLING PETALS ANIMATION ---
+        function createPetals() {
+            const container = document.getElementById('petals-container');
+            const petalCount = 12;
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                const size = Math.random() * 10 + 10;
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${Math.random() * 100}vw`;
+                const duration = Math.random() * 5 + 10;
+                const delay = Math.random() * 5;
+                petal.style.animationDuration = `${duration}s`;
+                petal.style.animationDelay = `${delay}s`;
+                const colors = ['#0498D5', '#E20D82', '#FBEB02'];
+                petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(petal);
+            }
+        }
+        createPetals();
+
+        // --- 2. MODAL LOGIC & AUTO TIMER ---
+        const modal = document.getElementById('quoteModal');
+        const modalContent = modal.querySelector('.modal-anim');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // TIMER: Show Popup Every 20 Seconds (20000ms)
+        setInterval(function () {
+            if (modal.classList.contains('hidden')) {
+                openModal();
+            }
+        }, 20000);
+
+        // --- 3. SCROLL REVEAL ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+
+        // --- 4. FORM SUBMISSION ---
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxFHy0MiRvwgrGkk8OwL6EMSBJzvUlz9nEil5A8dysNnGH61IVUQZsusMvmhjY6bfA/exec";
+
+        document.querySelectorAll('.contact-form').forEach(form => {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+
+                const submitBtn = form.querySelector('.submit-btn');
+                const originalText = submitBtn.innerText;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-75');
+
+                fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                    .then(response => {
+                        confetti({
+                            particleCount: 150,
+                            spread: 70,
+                            origin: { y: 0.6 },
+                            colors: ['#0498D5', '#E20D82', '#FBEB02']
+                        });
+
+                        Swal.fire({
+                            title: 'Request Sent!',
+                            text: 'We will contact you soon.',
+                            icon: 'success',
+                            confirmButtonColor: '#12162A',
+                            iconColor: '#0498D5'
+                        });
+
+                        form.reset();
+                        if (!modal.classList.contains('hidden')) {
+                            closeModal();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error!', error.message);
+                        Swal.fire({
+                            title: 'Oops...',
+                            text: 'Something went wrong. Please try again.',
+                            icon: 'error',
+                            confirmButtonColor: '#12162A'
+                        });
+                    })
+                    .finally(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-75');
+                    });
+            });
+        });
+    </script>
+</body>
+
+</html>
